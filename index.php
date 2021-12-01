@@ -6,12 +6,12 @@
 </head>
 <body>
     <?php
-        include './conexion.php';
+        include 'conexion.php';
         $sql="select * from usuarios";
         $resultado=mysqli_query($con,$sql);
     ?>
     <div>
-        <a href="./agregar.php">Nuevo</a>
+        <a href="otra/agregar.php">Nuevo</a>
         <table>
             <thead>
                 <tr>
