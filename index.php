@@ -2,16 +2,16 @@
 <html>
 <head>
     <title>CRUD</title>
-    <link rel = "stylesheet" TYPE = "text/css" HREF = "estilos.css" media = "screen">
+    <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body>
     <?php
-        include 'conexion.php';
+        include './conexion.php';
         $sql="select * from usuarios";
         $resultado=mysqli_query($con,$sql);
     ?>
     <div>
-        <a href="agregar.php">Nuevo</a>
+        <a href="./agregar.php">Nuevo</a>
         <table>
             <thead>
                 <tr>
