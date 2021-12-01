@@ -9,7 +9,7 @@
     </form>
 </div>
 <?php
-    include './conexion.php';
+    include 'conexion.php';
     $user=$_GET['txtuser'] ??"";
     $email=$_GET['txtemail'] ??"";
     if($user!=null || $email!=null){

@@ -11,7 +11,7 @@
         $resultado=mysqli_query($con,$sql);
     ?>
     <div>
-        <a href="otra/agregar.php">Nuevo</a>
+        <a href="agregar.php">Nuevo</a>
         <table>
             <thead>
                 <tr>
