@@ -1,4 +1,3 @@
 <?php
-    $con=mysqli_connect("localhost","root","root");
-    mysqli_select_db($con,"crud_final");
+    $con=mysqli_connect("localhost", "root", "root", "crud_final");
 ?>
