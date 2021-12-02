@@ -1,5 +1,5 @@
 <?php
-    $con=mysqli_connect('localhost', 'root', '123', 'crud_final');
+    $con=mysqli_connect('localhost', 'root', 'root', 'crud_final');
     if(!$con){
        echo "Error: No se pudo conectar a MySQL." . PHP_EOL;
        echo "errno de depuración: " . mysqli_connect_errno() . PHP_EOL;
