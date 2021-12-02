@@ -1,3 +1,3 @@
 <?php
-    $con=mysqli_connect("localhost", "root", "root", "crud_final");
+    $con=mysqli_connect("localhost", "root", "", "crud_final");
 ?>
