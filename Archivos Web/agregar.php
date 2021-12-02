@@ -9,14 +9,14 @@
     </form>
 </div>
 <?php
-    include 'conexion.php';
+    include '../Archivos Web/conexion.php';
     $user=$_GET['txtuser'] ??"";
     $email=$_GET['txtemail'] ??"";
     if($user!=null || $email!=null){
         $sql="insert into usuarios(usuario, email) values('".$user."', '".$email."')";
         mysqli_query($con,$sql);
         if ($user=1){
-            header("location:index.php");
+            header("location:../index.php");
         }
     }
 ?>
