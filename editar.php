@@ -1,5 +1,5 @@
 <?php
-    include './ArchivosWeb/conexion.php';
+    include 'conexion.php';
     $id=$_GET['id'];
     $sql="select * from usuarios where id='".$id."'";
     $resultado=mysqli_query($con,$sql);
@@ -24,7 +24,7 @@
         $sql2="update usuarios set usuario='".$user."', email='".$email."' where id='".$idu."'";
         mysqli_query($con,$sql2);
         if($user=1){
-            header("location:./index.php");
+            header("location:index.php");
         }
     }
 
