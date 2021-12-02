@@ -1,5 +1,5 @@
 <?php
-    include '../Archivos Web/conexion.php';
+    include '../ArchivosWeb/conexion.php';
     $id=$_GET['id'];
     $sql="select * from usuarios where id='".$id."'";
     $resultado=mysqli_query($con,$sql);
