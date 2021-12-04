@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mi-crud
+spec:
+  selector:
+    matchLabels:
+      app: mi-crud
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mi-crud
+    spec:
+      containers:
+      - name: crud-final
+        image: 17240139/crud-final:latest
+        volumeMounts:
+          - mountPath: /var/volumes
+            name: pv-storage
+        ports:
+        - containerPort: 80
+      volumes:
+        - name: pv-storage
+          persistentVolumeClaim:
+            claimName: pv-claim
