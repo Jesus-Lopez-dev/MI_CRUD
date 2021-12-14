@@ -74,7 +74,7 @@
               spec:
                 containers:
                 - name: storage
-                  image: michisauria/escuela-db:latest
+                  image: 17240139/basededatos:latest
                   ports:
                   - containerPort: 3306
                   volumeMounts:
@@ -127,7 +127,7 @@
               spec:
                 containers:
                 - name: crud
-                  image: michisauria/escuela:latest
+                  image: 17240139/aplicacion-web:latest
                   ports:
                   - containerPort: 80
 
