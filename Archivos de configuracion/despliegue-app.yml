@@ -1,0 +1,177 @@
+- hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Creacion de Namespace jlopez
+      k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Namespace
+          metadata:
+            name: jlopez
+            labels:
+              tipo: "desarrollo"
+    
+    - name: Creacion del volumen persistente
+      k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: PersistentVolume
+          metadata: 
+            name: volumen-p
+            namespace: jlopez
+            labels:
+              type: "desarrollo"
+          spec: 
+            storageClassName: storage
+            capacity:
+              storage: 2Gi
+            accessModes:
+              - ReadWriteOnce
+            hostPath:
+              path: "/mnt/data"
+
+    - name: Creacion del Claim del Volumen
+      k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: PersistentVolumeClaim
+          metadata:
+            name: db-claim
+            namespace: jlopez
+            labels:
+              tipo: "desarrollo"
+          spec:
+            storageClassName: storage
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: 2Gi
+    
+    - name: Creacion del Deploy de la BD
+      k8s:
+        state: present
+        definition:
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: storage
+            namespace: jlopez
+            labels:
+              tipo: "desarrollo"
+          spec:
+            selector:
+              matchLabels:
+                app: storage
+            template:
+              metadata:
+                labels:
+                  app: storage
+              spec:
+                containers:
+                - name: storage
+                  image: michisauria/escuela-db:latest
+                  ports:
+                  - containerPort: 3306
+                  volumeMounts:
+                  - mountPath: /var/lib/mysql
+                    name: storage
+                volumes:
+                - name: storage
+                  persistentVolumeClaim:
+                    claimName: db-claim
+
+    - name: Creacion del servicio de la BD
+      k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Service
+          metadata: 
+            name: localhost
+            namespace: jlopez
+            labels:
+              app: storage
+          spec:
+            ports: 
+            - port: 3306
+              targetPort: 3306
+              protocol: TCP
+            selector:
+              app: storage
+
+    - name: Creacion del deploy de la app
+      k8s:
+        state: present
+        definition:
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: crud
+            namespace: jlopez
+            labels:
+              tipo: "desarrollo"
+          spec:
+            selector:
+              matchLabels:
+                app: crud
+            replicas: 2
+            template:
+              metadata:
+                labels:
+                  app: crud
+              spec:
+                containers:
+                - name: crud
+                  image: michisauria/escuela:latest
+                  ports:
+                  - containerPort: 80
+
+    - name: Creacion del servicio de la app
+      k8s:
+        state: present
+        definition: 
+          apiVersion: v1
+          kind: Service
+          metadata:
+            name: crud-usuarios
+            namespace: jlopez
+            labels:
+              app: crud
+          spec:
+            type: NodePort
+            ports:
+            - port: 80
+              targetPort: 80
+              nodePort: 30005
+              protocol: TCP
+            selector:
+              app: crud
+
+    - name: Creacion del ingress
+      k8s:
+        state: present
+        definition:
+          apiVersion: networking.k8s.io/v1
+          kind: Ingress
+          metadata:
+            name: ingress-crud
+            namespace: jlopez
+            annotations:
+              nginx.ingress.kubernetes.io/rewrite-target: /
+          spec:
+            rules:
+            - host: app.jlopezvillavicencio.com
+              http:
+                paths:
+                - path: /
+                  pathType: Prefix
+                  backend:
+                    service:
+                      name: crud-usuarios
+                      port:
+                        number: 80
